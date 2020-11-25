@@ -68,9 +68,10 @@ async def get_region_kills_past_seconds_ago(session, region_id, seconds):
   except:
     return await get_region_kills_past_seconds_ago(session, region_id, seconds)
 
-async def seed_killmails(session, seconds, cur, conn):
-  print('Dropping old killmails')
+async def seed_killmails_and_jumps(session, seconds, cur, conn):
+  print('Dropping old killmails and jump information')
   cur.execute('DELETE FROM killmails')
+  cur.execute('DELETE FROM jumps')
   conn.commit()
 
   print('Seeding killmails from past ' + str(seconds) + ' seconds')
@@ -105,7 +106,7 @@ async def main(loop):
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path + '/' + name)
     cur  = conn.cursor()
-    await seed_killmails(session, 60*60, cur, conn)
+    await seed_killmails_and_jumps(session, 60*60, cur, conn)
 
 if __name__ == '__main__':
   loop = asyncio.get_event_loop()
