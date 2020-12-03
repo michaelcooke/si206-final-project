@@ -102,80 +102,80 @@ async def seed_killmails_and_jumps(session, seconds, cur, conn):
 def kills_donut_graph(cur, conn):
   killmails = cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id').fetchall()
   
-  highsec_kills = []
-  lowsec_kills = []
-  nullsec_kills = []
-  kills_1_0 = []
-  kills_0_9 = []
-  kills_0_8 = []
-  kills_0_7 = []
-  kills_0_6 = []
-  kills_0_5 = []
-  kills_0_4 = []
-  kills_0_3 = []
-  kills_0_2 = []
-  kills_0_1 = []
-  kills_n_0_0 = []
-  kills_n_0_1 = []
-  kills_n_0_2 = []
-  kills_n_0_3 = []
-  kills_n_0_4 = []
-  kills_n_0_5 = []
-  kills_n_0_6 = []
-  kills_n_0_7 = []
-  kills_n_0_8 = []
-  kills_n_0_9 = []
-  kills_n_1_0 = []
+  highsec_kills = 0
+  lowsec_kills = 0
+  nullsec_kills = 0
+  kills_1_0 = 0
+  kills_0_9 = 0
+  kills_0_8 = 0
+  kills_0_7 = 0
+  kills_0_6 = 0
+  kills_0_5 = 0
+  kills_0_4 = 0
+  kills_0_3 = 0
+  kills_0_2 = 0
+  kills_0_1 = 0
+  kills_n_0_0 = 0
+  kills_n_0_1 = 0
+  kills_n_0_2 = 0
+  kills_n_0_3 = 0
+  kills_n_0_4 = 0
+  kills_n_0_5 = 0
+  kills_n_0_6 = 0
+  kills_n_0_7 = 0
+  kills_n_0_8 = 0
+  kills_n_0_9 = 0
+  kills_n_1_0 = 0
 
   for killmail in killmails:
     if killmail[3] >= 0.5 and killmail[3] <= 1.0:
-      highsec_kills.append(killmail)
+      highsec_kills += 1
       if killmail[3] == 1.0:
-        kills_1_0.append(killmail)
+        kills_1_0 += 1
       elif killmail[3] == 0.9:
-        kills_0_9.append(killmail)
+        kills_0_9 += 1
       elif killmail[3] == 0.8:
-        kills_0_8.append(killmail)
+        kills_0_8 += 1
       elif killmail[3] == 0.7:
-        kills_0_7.append(killmail)
+        kills_0_7 += 1
       elif killmail[3] == 0.6:
-        kills_0_6.append(killmail)
+        kills_0_6 += 1
       elif killmail[3] == 0.5:
-        kills_0_5.append(killmail)
+        kills_0_5 += 1
     elif killmail[3] >= 0.1 and killmail[3] <= 0.4:
-      lowsec_kills.append(lowsec_kills)
+      lowsec_kills += 1
       if killmail[3] == 0.4:
-        kills_0_4.append(killmail)
+        kills_0_4 += 1
       elif killmail[3] == 0.3:
-        kills_0_3.append(killmail)
+        kills_0_3 += 1
       elif killmail[3] == 0.2:
-        kills_0_2.append(killmail)
+        kills_0_2 += 1
       elif killmail[3] == 0.1:
-        kills_0_1.append(killmail)
+        kills_0_1 += 1
     else:
-      nullsec_kills.append(nullsec_kills)
+      nullsec_kills += 1
       if killmail[3] == -1.0:
-        kills_n_1_0.append(killmail)
+        kills_n_1_0 += 1
       elif killmail[3] == -0.9:
-        kills_n_0_9.append(killmail)
+        kills_n_0_9 += 1
       elif killmail[3] == -0.8:
-        kills_n_0_8.append(killmail)
+        kills_n_0_8 += 1
       elif killmail[3] == -0.7:
-        kills_n_0_7.append(killmail)
+        kills_n_0_7 += 1
       elif killmail[3] == -0.6:
-        kills_n_0_6.append(killmail)
+        kills_n_0_6 += 1
       elif killmail[3] == -0.5:
-        kills_n_0_5.append(killmail)
+        kills_n_0_5 += 1
       elif killmail[3] == -0.4:
-        kills_n_0_4.append(killmail)
+        kills_n_0_4 += 1
       elif killmail[3] == -0.3:
-        kills_n_0_3.append(killmail)
+        kills_n_0_3 += 1
       elif killmail[3] == -0.2:
-        kills_n_0_2.append(killmail)
+        kills_n_0_2 += 1
       elif killmail[3] == -0.1:
-        kills_n_0_1.append(killmail)
+        kills_n_0_1 += 1
       elif killmail[3] == 0.0:
-        kills_n_0_0.append(killmail)
+        kills_n_0_0 += 1
 
 async def main(loop):
   connector = aiohttp.TCPConnector(limit=50)
