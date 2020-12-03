@@ -99,6 +99,84 @@ async def seed_killmails_and_jumps(session, seconds, cur, conn):
     ))
     conn.commit()
 
+def kills_donut_graph(cur, conn):
+  killmails = cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id').fetchall()
+  
+  highsec_kills = []
+  lowsec_kills = []
+  nullsec_kills = []
+  kills_1_0 = []
+  kills_0_9 = []
+  kills_0_8 = []
+  kills_0_7 = []
+  kills_0_6 = []
+  kills_0_5 = []
+  kills_0_4 = []
+  kills_0_3 = []
+  kills_0_2 = []
+  kills_0_1 = []
+  kills_n_0_0 = []
+  kills_n_0_1 = []
+  kills_n_0_2 = []
+  kills_n_0_3 = []
+  kills_n_0_4 = []
+  kills_n_0_5 = []
+  kills_n_0_6 = []
+  kills_n_0_7 = []
+  kills_n_0_8 = []
+  kills_n_0_9 = []
+  kills_n_1_0 = []
+
+  for killmail in killmails:
+    if killmail[3] >= 0.5 and killmail[3] <= 1.0:
+      highsec_kills.append(killmail)
+      if killmail[3] == 1.0:
+        kills_1_0.append(killmail)
+      elif killmail[3] == 0.9:
+        kills_0_9.append(killmail)
+      elif killmail[3] == 0.8:
+        kills_0_8.append(killmail)
+      elif killmail[3] == 0.7:
+        kills_0_7.append(killmail)
+      elif killmail[3] == 0.6:
+        kills_0_6.append(killmail)
+      elif killmail[3] == 0.5:
+        kills_0_5.append(killmail)
+    elif killmail[3] >= 0.1 and killmail[3] <= 0.4:
+      lowsec_kills.append(lowsec_kills)
+      if killmail[3] == 0.4:
+        kills_0_4.append(killmail)
+      elif killmail[3] == 0.3:
+        kills_0_3.append(killmail)
+      elif killmail[3] == 0.2:
+        kills_0_2.append(killmail)
+      elif killmail[3] == 0.1:
+        kills_0_1.append(killmail)
+    else:
+      nullsec_kills.append(nullsec_kills)
+      if killmail[3] == -1.0:
+        kills_n_1_0.append(killmail)
+      elif killmail[3] == -0.9:
+        kills_n_0_9.append(killmail)
+      elif killmail[3] == -0.8:
+        kills_n_0_8.append(killmail)
+      elif killmail[3] == -0.7:
+        kills_n_0_7.append(killmail)
+      elif killmail[3] == -0.6:
+        kills_n_0_6.append(killmail)
+      elif killmail[3] == -0.5:
+        kills_n_0_5.append(killmail)
+      elif killmail[3] == -0.4:
+        kills_n_0_4.append(killmail)
+      elif killmail[3] == -0.3:
+        kills_n_0_3.append(killmail)
+      elif killmail[3] == -0.2:
+        kills_n_0_2.append(killmail)
+      elif killmail[3] == -0.1:
+        kills_n_0_1.append(killmail)
+      elif killmail[3] == 0.0:
+        kills_n_0_0.append(killmail)
+
 async def main(loop):
   connector = aiohttp.TCPConnector(limit=50)
   async with aiohttp.ClientSession(loop=loop, connector=connector) as session:
@@ -107,6 +185,7 @@ async def main(loop):
     conn = sqlite3.connect(path + '/' + name)
     cur  = conn.cursor()
     await seed_killmails_and_jumps(session, 60*60, cur, conn)
+    kills_donut_graph(cur, conn)
 
 if __name__ == '__main__':
   loop = asyncio.get_event_loop()
