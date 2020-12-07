@@ -6,7 +6,7 @@ import re
 import sqlite3
 
 def is_k_space_system(system_name):
-  return not re.match(r'J\d{6}', system_name) or re.match(r'AD\d{3}', system_name) or re.match(r'P-\d{3}', system_name) or system_name == 'Thera'
+  return not re.match(r'J\d{6}', system_name) or re.match(r'AD.{3}', system_name) or re.match(r'P-\d{3}', system_name) or system_name == 'Thera'
 
 async def get_killmail(session, killmail_id, killmail_hash):
   try:
