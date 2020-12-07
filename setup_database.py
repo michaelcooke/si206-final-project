@@ -71,8 +71,7 @@ async def seed_systems(session, cur, conn):
     cur.execute('INSERT INTO systems (id, name, security_status) VALUES (?, ?, ?)', (
       system['system_id'],
       system['name'],
-      round(float(system['security_status']), 1),
-      system
+      round(float(system['security_status']), 1)
     ))
 
   conn.commit()
