@@ -3,8 +3,11 @@ import asyncio
 import json
 import matplotlib.pyplot as plt
 import os
+import re
 import sqlite3
 
+def is_k_space_system(system_name):
+  return not re.match(r'J\d{6}', system_name) or re.match(r'AD.{3}', system_name) or re.match(r'P-\d{3}', system_name) or system_name == 'Thera'
 
 async def get_killmail(session, killmail_id, killmail_hash):
   try:
@@ -98,7 +101,7 @@ def store_data(cur, conn, silly_asinine_arbitrary_row_limit):
       cur.execute('CREATE TABLE IF NOT EXISTS jumps (id INTEGER PRIMARY KEY, jumps INTEGER)')
       cur.execute('CREATE TABLE IF NOT EXISTS killmails (id INTEGER PRIMARY KEY, system_id INTEGER, war_kill BOOLEAN, killmail_time DATETIME)')
     for system in systems:
-      if len(cur.execute('SELECT * FROM systems WHERE id == ' + str(system['system_id'])).fetchall()) == 0:
+      if is_k_space_system(system['name']) and len(cur.execute('SELECT * FROM systems WHERE id == ' + str(system['system_id'])).fetchall()) == 0:
         cur.execute('INSERT INTO systems (id, name, security_status) VALUES (?, ?, ?)', (
           system['system_id'],
           system['name'],
@@ -139,7 +142,7 @@ def store_data(cur, conn, silly_asinine_arbitrary_row_limit):
           executions_file.close()
           return None
     for killmail in killmails:
-      if len(cur.execute('SELECT * FROM killmails WHERE id == ' + str(killmail['killmail_id'])).fetchall()) == 0:
+      if is_k_space_system(system['name']) and len(cur.execute('SELECT * FROM killmails WHERE id == ' + str(killmail['killmail_id'])).fetchall()) == 0:
         cur.execute('INSERT INTO killmails (id, system_id, war_kill, killmail_time) VALUES (?, ?, ?, ?)', (
           killmail['killmail_id'],
           killmail['solar_system_id'],
@@ -254,7 +257,6 @@ def process_data(cur, conn):
 
   calculations_file.close()
 
-  
 async def main(loop):
   connector = aiohttp.TCPConnector(limit=50)
   async with aiohttp.ClientSession(loop=loop, connector=connector) as session:
