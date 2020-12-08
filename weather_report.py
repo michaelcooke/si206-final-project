@@ -171,9 +171,9 @@ def process_data(cur, conn):
   lowsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status BETWEEN 0.1 AND 0.4').fetchall())
   nullsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status <= 0.0').fetchall())
   
-  calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occuring in highsec: ' + str(highsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n')
-  calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occuring in lowsec ' + str(lowsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n')
-  calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occuring in nullsec: ' + str(nullsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n\n')
+  calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in highsec: ' + str(highsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n')
+  calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in lowsec ' + str(lowsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n')
+  calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in nullsec: ' + str(nullsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n\n')
 
   plt.title('Proportion of Kills in New Eden in Past Hour from Data Collection Time by Security Classification of System')
   plt.pie([highsec_kills, lowsec_kills, nullsec_kills], labels=['Highsec', 'Lowsec', 'Nullsec'], autopct='%1.1f%%', startangle=90)
@@ -190,9 +190,9 @@ def process_data(cur, conn):
   for entry in cur.execute('SELECT jumps.id, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE systems.security_status <= 0.0').fetchall():
     nullsec_jumps += entry[1]
 
-  calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occuring in highsec: ' + str(highsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n')
-  calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occuring in lowsec: ' + str(lowsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n')
-  calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occuring in nullsec: ' + str(nullsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n\n')
+  calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in highsec: ' + str(highsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n')
+  calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in lowsec: ' + str(lowsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n')
+  calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in nullsec: ' + str(nullsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n\n')
 
   plt.title('Proportion of Jumps in New Eden in Past Hour from Data Collection Time by Security Classification of System')
   plt.pie([highsec_jumps, lowsec_jumps, nullsec_jumps], labels=['Highsec', 'Lowsec', 'Nullsec'], autopct='%1.1f%%', startangle=90)
