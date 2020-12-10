@@ -160,7 +160,7 @@ def process_data(cur, conn):
   with open('executions.txt', 'r') as executions_file:
     executions_file.seek(0)
     executions = int(executions_file.read()[-1])
-  if executions >= 5:
+  if executions == 4:
     with open('calculations.txt', 'w') as calculations_file:
 
       highsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status >= 0.5').fetchall())
