@@ -83,7 +83,7 @@ def store_data(cur, conn, row_limit):
     systems = json.load(systems_file)
     jumps = json.load(jumps_file)
     killmails = json.load(killmails_file)
-    current_silly_asinine_arbitrary_row = 0
+    current_row = 0
     executions_file.seek(0)
     if executions_file.read() == '':
       executions = 0
@@ -103,8 +103,8 @@ def store_data(cur, conn, row_limit):
           round(float(system['security_status']), 1)
         ))
         conn.commit()
-        current_silly_asinine_arbitrary_row += 1
-        if executions < 4 and current_silly_asinine_arbitrary_row == row_limit:
+        current_row += 1
+        if executions < 4 and current_row == row_limit:
           executions_file.seek(0)
           if executions_file.read() == '':
             executions = 0
@@ -122,8 +122,8 @@ def store_data(cur, conn, row_limit):
           jump['ship_jumps']
         ))
         conn.commit()
-        current_silly_asinine_arbitrary_row += 1
-        if executions < 4 and current_silly_asinine_arbitrary_row == row_limit:
+        current_row += 1
+        if executions < 4 and current_row == row_limit:
           executions_file.seek(0)
           if executions_file.read() == '':
             executions = 0
@@ -143,8 +143,8 @@ def store_data(cur, conn, row_limit):
           killmail['killmail_time']
         ))
         conn.commit()
-        current_silly_asinine_arbitrary_row += 1
-        if executions < 4 and current_silly_asinine_arbitrary_row == row_limit:
+        current_row += 1
+        if executions < 4 and current_row == row_limit:
           executions_file.seek(0)
           if executions_file.read() == '':
             executions = 0
