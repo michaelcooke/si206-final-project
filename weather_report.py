@@ -80,7 +80,7 @@ async def get_data(session):
       json.dump(killmails, file)
       file.close()
 
-def store_data(cur, conn, silly_asinine_arbitrary_row_limit):
+def store_data(cur, conn, row_limit):
   with open('systems.json', 'r') as systems_file, open('jumps.json', 'r') as jumps_file, open('killmails.json', 'r') as killmails_file, open('executions.txt', 'a+') as executions_file:
     systems = json.load(systems_file)
     systems_file.close()
@@ -109,7 +109,7 @@ def store_data(cur, conn, silly_asinine_arbitrary_row_limit):
         ))
         conn.commit()
         current_silly_asinine_arbitrary_row += 1
-        if executions < 4 and current_silly_asinine_arbitrary_row == silly_asinine_arbitrary_row_limit:
+        if executions < 4 and current_silly_asinine_arbitrary_row == row_limit:
           executions_file.seek(0)
           if executions_file.read() == '':
             executions = 0
@@ -129,7 +129,7 @@ def store_data(cur, conn, silly_asinine_arbitrary_row_limit):
         ))
         conn.commit()
         current_silly_asinine_arbitrary_row += 1
-        if executions < 4 and current_silly_asinine_arbitrary_row == silly_asinine_arbitrary_row_limit:
+        if executions < 4 and current_silly_asinine_arbitrary_row == row_limit:
           executions_file.seek(0)
           if executions_file.read() == '':
             executions = 0
@@ -151,7 +151,7 @@ def store_data(cur, conn, silly_asinine_arbitrary_row_limit):
         ))
         conn.commit()
         current_silly_asinine_arbitrary_row += 1
-        if executions < 4 and current_silly_asinine_arbitrary_row == silly_asinine_arbitrary_row_limit:
+        if executions < 4 and current_silly_asinine_arbitrary_row == row_limit:
           executions_file.seek(0)
           if executions_file.read() == '':
             executions = 0
@@ -263,7 +263,7 @@ async def main(loop):
     await get_data(session)
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
-    store_data(cur, conn, silly_asinine_arbitrary_row_limit = 25)
+    store_data(cur, conn, row_limit = 25)
     process_data(cur, conn)
 
 if __name__ == '__main__':
