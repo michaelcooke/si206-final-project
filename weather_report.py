@@ -161,95 +161,93 @@ def process_data(cur, conn):
     executions_file.seek(0)
     executions = int(executions_file.read()[-1])
   if executions >= 5:
-    calculations_file = open('calculations.txt', 'w')
+    with open('calculations.txt', 'w') as calculations_file:
 
-    highsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status >= 0.5').fetchall())
-    lowsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status BETWEEN 0.1 AND 0.4').fetchall())
-    nullsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status <= 0.0').fetchall())
-    
-    calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in highsec: ' + str(highsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n')
-    calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in lowsec ' + str(lowsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n')
-    calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in nullsec: ' + str(nullsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n\n')
+      highsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status >= 0.5').fetchall())
+      lowsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status BETWEEN 0.1 AND 0.4').fetchall())
+      nullsec_kills = len(cur.execute('SELECT killmails.id, killmails.system_id, systems.name, systems.security_status FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.security_status <= 0.0').fetchall())
+      
+      calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in highsec: ' + str(highsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n')
+      calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in lowsec ' + str(lowsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n')
+      calculations_file.write('Proportion of kills in New Eden in past hour from data collection time occurring in nullsec: ' + str(nullsec_kills/(highsec_kills+lowsec_kills+nullsec_kills)) + '\n\n')
 
-    plt.title('Proportion of Kills in New Eden in Past Hour from Data Collection Time by Security Classification of System')
-    plt.pie([highsec_kills, lowsec_kills, nullsec_kills], labels=['Highsec', 'Lowsec', 'Nullsec'], autopct='%1.1f%%', startangle=90)
-    plt.axis('equal')
-    plt.show()
+      plt.title('Proportion of Kills in New Eden in Past Hour from Data Collection Time by Security Classification of System')
+      plt.pie([highsec_kills, lowsec_kills, nullsec_kills], labels=['Highsec', 'Lowsec', 'Nullsec'], autopct='%1.1f%%', startangle=90)
+      plt.axis('equal')
+      plt.show()
 
-    highsec_jumps = 0
-    for entry in cur.execute('SELECT jumps.id, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE systems.security_status >= 0.5').fetchall():
-      highsec_jumps += entry[1]
-    lowsec_jumps = 0
-    for entry in cur.execute('SELECT jumps.id, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE systems.security_status BETWEEN 0.1 AND 0.4').fetchall():
-      lowsec_jumps += entry[1]
-    nullsec_jumps = 0
-    for entry in cur.execute('SELECT jumps.id, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE systems.security_status <= 0.0').fetchall():
-      nullsec_jumps += entry[1]
+      highsec_jumps = 0
+      for entry in cur.execute('SELECT jumps.id, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE systems.security_status >= 0.5').fetchall():
+        highsec_jumps += entry[1]
+      lowsec_jumps = 0
+      for entry in cur.execute('SELECT jumps.id, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE systems.security_status BETWEEN 0.1 AND 0.4').fetchall():
+        lowsec_jumps += entry[1]
+      nullsec_jumps = 0
+      for entry in cur.execute('SELECT jumps.id, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE systems.security_status <= 0.0').fetchall():
+        nullsec_jumps += entry[1]
 
-    calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in highsec: ' + str(highsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n')
-    calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in lowsec: ' + str(lowsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n')
-    calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in nullsec: ' + str(nullsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n\n')
+      calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in highsec: ' + str(highsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n')
+      calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in lowsec: ' + str(lowsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n')
+      calculations_file.write('Proportion of jumps in New Eden in past hour from data collection time occurring in nullsec: ' + str(nullsec_jumps/(highsec_jumps+lowsec_jumps+nullsec_jumps)) + '\n\n')
 
-    plt.title('Proportion of Jumps in New Eden in Past Hour from Data Collection Time by Security Classification of System')
-    plt.pie([highsec_jumps, lowsec_jumps, nullsec_jumps], labels=['Highsec', 'Lowsec', 'Nullsec'], autopct='%1.1f%%', startangle=90)
-    plt.axis('equal')
-    plt.show()
+      plt.title('Proportion of Jumps in New Eden in Past Hour from Data Collection Time by Security Classification of System')
+      plt.pie([highsec_jumps, lowsec_jumps, nullsec_jumps], labels=['Highsec', 'Lowsec', 'Nullsec'], autopct='%1.1f%%', startangle=90)
+      plt.axis('equal')
+      plt.show()
 
-    systems = cur.execute('SELECT id FROM systems').fetchall()
+      systems = cur.execute('SELECT id FROM systems').fetchall()
 
-    system_kills = {}
-    for system in systems:
-      kills = cur.execute('SELECT systems.id, systems.name, killmails.id FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.id == ' + str(system[0])).fetchall()
-      if len(kills) != 0 and kills[0][1][:2] != 'AD':
-        system_kills[kills[0][1]] = len(kills)
+      system_kills = {}
+      for system in systems:
+        kills = cur.execute('SELECT systems.id, systems.name, killmails.id FROM killmails INNER JOIN systems ON killmails.system_id=systems.id WHERE systems.id == ' + str(system[0])).fetchall()
+        if len(kills) != 0 and kills[0][1][:2] != 'AD':
+          system_kills[kills[0][1]] = len(kills)
 
-    system_kills_explainer = 'Top 5 systems by kills in past hour from data collection time:\n'
-    for entry in sorted(system_kills, key=system_kills.get, reverse=True)[:5]:
-      system_kills_explainer += entry + ': ' + str(system_kills[entry]) + '\n'
-    calculations_file.write(system_kills_explainer + '\n')
+      system_kills_explainer = 'Top 5 systems by kills in past hour from data collection time:\n'
+      for entry in sorted(system_kills, key=system_kills.get, reverse=True)[:5]:
+        system_kills_explainer += entry + ': ' + str(system_kills[entry]) + '\n'
+      calculations_file.write(system_kills_explainer + '\n')
 
-    top_5_systems_kills = sorted(system_kills, key=system_kills.get, reverse=True)[:5]
-    top_5_systems_kills_values = [
-      system_kills[top_5_systems_kills[0]],
-      system_kills[top_5_systems_kills[1]],
-      system_kills[top_5_systems_kills[2]],
-      system_kills[top_5_systems_kills[3]],
-      system_kills[top_5_systems_kills[4]]
-    ]
+      top_5_systems_kills = sorted(system_kills, key=system_kills.get, reverse=True)[:5]
+      top_5_systems_kills_values = [
+        system_kills[top_5_systems_kills[0]],
+        system_kills[top_5_systems_kills[1]],
+        system_kills[top_5_systems_kills[2]],
+        system_kills[top_5_systems_kills[3]],
+        system_kills[top_5_systems_kills[4]]
+      ]
 
-    plt.bar(top_5_systems_kills, top_5_systems_kills_values)
-    plt.title('Freqeuncy of Top 5 Systems By Kills in Past Hour From Data Collection Time')
-    plt.xlabel('System Name')
-    plt.ylabel('Frequency of Kills in Past Hour From Data Collection Time')
-    plt.show()
+      plt.bar(top_5_systems_kills, top_5_systems_kills_values)
+      plt.title('Freqeuncy of Top 5 Systems By Kills in Past Hour From Data Collection Time')
+      plt.xlabel('System Name')
+      plt.ylabel('Frequency of Kills in Past Hour From Data Collection Time')
+      plt.show()
 
-    system_jumps = {}
-    for system in systems:
-      jumps = cur.execute('SELECT systems.id, systems.name, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE jumps.id == ' + str(system[0])).fetchall()
-      if len(jumps) != 0 and jumps[0][1] != 'AD':
-        system_jumps[jumps[0][1]] = jumps[0][2]
+      system_jumps = {}
+      for system in systems:
+        jumps = cur.execute('SELECT systems.id, systems.name, jumps.jumps FROM jumps INNER JOIN systems ON jumps.id=systems.id WHERE jumps.id == ' + str(system[0])).fetchall()
+        if len(jumps) != 0 and jumps[0][1] != 'AD':
+          system_jumps[jumps[0][1]] = jumps[0][2]
 
-    system_jumps_explainer = 'Top 5 systems by jumps in past hour from data collection time:\n'
-    for entry in sorted(system_jumps, key=system_jumps.get, reverse=True)[:5]:
-      system_jumps_explainer += entry + ': ' + str(system_jumps[entry]) + '\n'
-    calculations_file.write(system_jumps_explainer)
+      system_jumps_explainer = 'Top 5 systems by jumps in past hour from data collection time:\n'
+      for entry in sorted(system_jumps, key=system_jumps.get, reverse=True)[:5]:
+        system_jumps_explainer += entry + ': ' + str(system_jumps[entry]) + '\n'
+      calculations_file.write(system_jumps_explainer)
 
-    top_5_systems_jumps = sorted(system_jumps, key=system_jumps.get, reverse=True)[:5]
-    top_5_systems_jumps_values = [
-      system_jumps[top_5_systems_jumps[0]],
-      system_jumps[top_5_systems_jumps[1]],
-      system_jumps[top_5_systems_jumps[2]],
-      system_jumps[top_5_systems_jumps[3]],
-      system_jumps[top_5_systems_jumps[4]]
-    ]
+      top_5_systems_jumps = sorted(system_jumps, key=system_jumps.get, reverse=True)[:5]
+      top_5_systems_jumps_values = [
+        system_jumps[top_5_systems_jumps[0]],
+        system_jumps[top_5_systems_jumps[1]],
+        system_jumps[top_5_systems_jumps[2]],
+        system_jumps[top_5_systems_jumps[3]],
+        system_jumps[top_5_systems_jumps[4]]
+      ]
 
-    plt.bar(top_5_systems_jumps, top_5_systems_jumps_values)
-    plt.title('Freqeuncy of Top 5 Systems By Jumps in Past Hour From Data Collection Time')
-    plt.xlabel('System Name')
-    plt.ylabel('Frequency of Jumps in Past Hour From Data Collection Time')
-    plt.show()
-
-    calculations_file.close()
+      plt.bar(top_5_systems_jumps, top_5_systems_jumps_values)
+      plt.title('Freqeuncy of Top 5 Systems By Jumps in Past Hour From Data Collection Time')
+      plt.xlabel('System Name')
+      plt.ylabel('Frequency of Jumps in Past Hour From Data Collection Time')
+      plt.show()
 
 async def main(loop):
   connector = aiohttp.TCPConnector(limit=50)
