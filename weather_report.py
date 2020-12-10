@@ -64,12 +64,10 @@ async def get_data(session):
     systems = await asyncio.gather(*[get_system(session, system_id) for system_id in await get_systems(session)])
     with open('systems.json', 'w') as file:
       json.dump(systems, file)
-      file.close()
   if not os.path.exists('jumps.json'):
     jumps = await get_system_jumps(session)
     with open('jumps.json', 'w') as file:
       json.dump(jumps, file)
-      file.close()
   if not os.path.exists('killmails.json'):
     zkill_killmails = []
     for region_id in [region for region in await get_regions(session)]:
@@ -78,16 +76,13 @@ async def get_data(session):
     killmails = await asyncio.gather(*[get_killmail(session, zkill_killmail['killmail_id'], zkill_killmail['zkb']['hash']) for zkill_killmail in zkill_killmails])
     with open('killmails.json', 'w') as file:
       json.dump(killmails, file)
-      file.close()
+      
 
 def store_data(cur, conn, row_limit):
   with open('systems.json', 'r') as systems_file, open('jumps.json', 'r') as jumps_file, open('killmails.json', 'r') as killmails_file, open('executions.txt', 'a+') as executions_file:
     systems = json.load(systems_file)
-    systems_file.close()
     jumps = json.load(jumps_file)
-    jumps_file.close()
     killmails = json.load(killmails_file)
-    killmails_file.close()
     current_silly_asinine_arbitrary_row = 0
     executions_file.seek(0)
     if executions_file.read() == '':
@@ -119,7 +114,6 @@ def store_data(cur, conn, row_limit):
           executions_file.seek(0)
           executions_file.write(str(executions+1))
           executions_file.truncate()
-          executions_file.close()
           return None
     for jump in jumps:
       if len(cur.execute('SELECT * FROM jumps WHERE id == ' + str(jump['system_id'])).fetchall()) == 0:
@@ -139,7 +133,6 @@ def store_data(cur, conn, row_limit):
           executions_file.seek(0)
           executions_file.write(str(executions+1))
           executions_file.truncate()
-          executions_file.close()
           return None
     for killmail in killmails:
       if is_k_space_system(system['name']) and len(cur.execute('SELECT * FROM killmails WHERE id == ' + str(killmail['killmail_id'])).fetchall()) == 0:
@@ -161,7 +154,6 @@ def store_data(cur, conn, row_limit):
           executions_file.seek(0)
           executions_file.write(str(executions+1))
           executions_file.truncate()
-          executions_file.close()
           return None
 
 def process_data(cur, conn):
