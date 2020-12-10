@@ -213,7 +213,6 @@ def process_data(cur, conn):
   calculations_file.write(system_kills_explainer + '\n')
 
   top_5_systems_kills = sorted(system_kills, key=system_kills.get, reverse=True)[:5]
-  print(top_5_systems_kills)
   top_5_systems_kills_values = [
     system_kills[top_5_systems_kills[0]],
     system_kills[top_5_systems_kills[1]],
@@ -240,7 +239,6 @@ def process_data(cur, conn):
   calculations_file.write(system_jumps_explainer)
 
   top_5_systems_jumps = sorted(system_jumps, key=system_jumps.get, reverse=True)[:5]
-  print(top_5_systems_jumps)
   top_5_systems_jumps_values = [
     system_jumps[top_5_systems_jumps[0]],
     system_jumps[top_5_systems_jumps[1]],
